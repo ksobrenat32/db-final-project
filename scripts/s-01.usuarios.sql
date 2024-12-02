@@ -17,7 +17,7 @@ prompt Creando usuarios y roles
 prompt Creando rol_admin
 DROP ROLE IF EXISTS rol_admin;
 CREATE ROLE rol_admin;
-GRANT CREATE VIEW, CREATE SEQUENCE, CREATE SYNONYM, CREATE TABLE, CREATE PROCEDURE, CREATE TRIGGER, CREATE INDEX, CREATE SESSION TO rol_admin;
+GRANT CREATE VIEW, CREATE SEQUENCE, CREATE SYNONYM, CREATE TABLE, CREATE PROCEDURE, CREATE TRIGGER, CREATE SESSION TO rol_admin;
 
 prompt Creando rol_invitado
 DROP ROLE IF EXISTS rol_invitado;
@@ -26,11 +26,11 @@ GRANT CREATE SESSION TO rol_invitado;
 
 -- Crear usuarios
 prompt Creando cn_proy_admin
-DROP USER IF EXISTS cn_proy_admin;
-CREATE USER cn_proy_admin IDENTIFIED BY cn_proy_admin;
+DROP USER IF EXISTS cn_proy_admin CASCADE;
+CREATE USER cn_proy_admin IDENTIFIED BY cn_proy_admin QUOTA UNLIMITED ON USERS;
 GRANT rol_admin TO cn_proy_admin;
 
 prompt Creando cn_proy_invitado
-DROP USER IF EXISTS cn_proy_invitado;
+DROP USER IF EXISTS cn_proy_invitado CASCADE;
 CREATE USER cn_proy_invitado IDENTIFIED BY cn_proy_invitado;
 GRANT rol_invitado TO cn_proy_invitado;
