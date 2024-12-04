@@ -10,6 +10,7 @@
         "direccion",
         "FREEPDB",
         "historico",
+        "nextval",
         "proy",
         "ubicacion",
         "vehiculo"
