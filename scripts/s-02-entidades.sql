@@ -12,10 +12,6 @@ CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
 prompt Creando tablas
 
-prompt Crear secuencia usuario_seq para usuario_id
-DROP SEQUENCE IF EXISTS usuario_seq;
-CREATE SEQUENCE usuario_seq START WITH 1 INCREMENT BY 1;
-
 prompt Crear tabla usuario
 DROP TABLE IF EXISTS usuario;
 CREATE TABLE usuario (
@@ -36,10 +32,6 @@ CREATE TABLE usuario (
         (es_conductor = 0 and es_administrador = 0)
     )
 );
-
-prompt Crear secuencia descuento_seq para descuento_id
-DROP SEQUENCE IF EXISTS descuento_seq;
-CREATE SEQUENCE descuento_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla descuento
 DROP TABLE IF EXISTS descuento;
@@ -76,7 +68,7 @@ prompt Crear tabla usuario_cliente
 DROP TABLE IF EXISTS usuario_cliente;
 CREATE TABLE usuario_cliente (
     usuario_id NUMBER(10,0) constraint usuario_cliente_pk primary key,
-    fecha_registro DATE not null default SYSDATE,
+    fecha_registro DATE default SYSDATE not null,
     num_celular VARCHAR2(10) not null,
     constraint usuario_cliente_usuario_id_fk foreign key(usuario_id) references usuario(usuario_id)
 );
@@ -90,10 +82,6 @@ CREATE TABLE pago (
     monto_total NUMBER(7,2) not null,
     constraint pago_pk primary key(usuario_id, folio)
 );
-
-prompt Crear tabla secuencia tags_seq para tag_id
-DROP SEQUENCE IF EXISTS tags_seq;
-CREATE SEQUENCE tags_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla tags
 DROP TABLE IF EXISTS tags;
@@ -112,10 +100,6 @@ CREATE TABLE tags_conductor (
     constraint tags_conductor_pk primary key(usuario_id, tag_id)
 );
 
-prompt Crear secuencia marca_seq para marca_id
-DROP SEQUENCE IF EXISTS marca_seq;
-CREATE SEQUENCE marca_seq START WITH 1 INCREMENT BY 1;
-
 prompt Crear tabla marca
 DROP TABLE IF EXISTS marca;
 CREATE TABLE marca (
@@ -124,10 +108,6 @@ CREATE TABLE marca (
     categoria NUMBER(1,0) not null,
     constraint marca_categoria_ck check(categoria in (1, 2, 3))
 );
-
-prompt Crear secuencia modelo_seq para modelo_id
-DROP SEQUENCE IF EXISTS modelo_seq;
-CREATE SEQUENCE modelo_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla modelo
 DROP TABLE IF EXISTS modelo;
@@ -138,23 +118,15 @@ CREATE TABLE modelo (
     marca_id NUMBER(10,0) not null constraint modelo_marca_id_fk references marca(marca_id)
 );
 
-prompt Crear secuencia vehiculo_seq para vehiculo_id
-DROP SEQUENCE IF EXISTS vehiculo_seq;
-CREATE SEQUENCE vehiculo_seq START WITH 1 INCREMENT BY 1;
-
 prompt Crear tabla vehiculo
 DROP TABLE IF EXISTS vehiculo;
 CREATE TABLE vehiculo (
     vehiculo_id NUMBER(10,0) default vehiculo_seq.nextval constraint vehiculo_pk primary key,
     placas VARCHAR(7) not null,
-    anio NUMBER(4,0) not null constraint vehiculo_anio_ck check(anio >= TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY') - 5 )),
+    anio NUMBER(4,0) not null,
     modelo_id NUMBER(10,0) not null constraint vehiculo_modelo_id_fk references modelo(modelo_id),
     usuario_id NUMBER(10,0) not null constraint vehiculo_usuario_id_fk references usuario_conductor(usuario_id)
 );
-
-prompt Crear secuencia tarjeta_seq para tarjeta_id
-DROP SEQUENCE IF EXISTS tarjeta_seq;
-CREATE SEQUENCE tarjeta_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla tarjeta
 DROP TABLE IF EXISTS tarjeta;
@@ -164,12 +136,7 @@ CREATE TABLE tarjeta (
     mes NUMBER(2,0) not null,
     anio NUMBER(2,0) not null,
     usuario_id NUMBER(10,0) not null constraint tarjeta_usuario_id_fk references usuario_cliente(usuario_id)
-    check tarjeta_validez_ck( (anio = TO_NUMBER(TO_CHAR(SYSDATE, 'YY')) and mes >= TO_NUMBER(TO_CHAR(SYSDATE, 'MM')) ) or anio > TO_NUMBER(TO_CHAR(SYSDATE, 'YY')) )
 );
-
-prompt Crear secuencia status_viaje_seq para status_id
-DROP SEQUENCE IF EXISTS status_viaje_seq;
-CREATE SEQUENCE status_viaje_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla status_viaje
 DROP TABLE IF EXISTS status_viaje;
@@ -178,10 +145,6 @@ CREATE TABLE status_viaje (
     clave VARCHAR2(20) not null,
     descripcion VARCHAR2(200) not null
 );
-
-prompt Crear secuencia viaje_seq para viaje_id
-DROP SEQUENCE IF EXISTS viaje_seq;
-CREATE SEQUENCE viaje_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla viaje
 DROP TABLE IF EXISTS viaje;
@@ -210,10 +173,6 @@ CREATE TABLE resumen_viaje (
     constraint resumen_viaje_pk primary key(viaje_id)
 );
 
-prompt Crear secuencia factura_seq para factura_id
-DROP SEQUENCE IF EXISTS factura_seq;
-CREATE SEQUENCE factura_seq START WITH 1 INCREMENT BY 1;
-
 prompt Crear tabla factura
 DROP TABLE IF EXISTS factura;
 CREATE TABLE factura (
@@ -225,9 +184,6 @@ CREATE TABLE factura (
     direccion VARCHAR2(200) not null
 );
 
-prompt Crear secuencia ubicacion_historico_seq para ubicacion_historico_id
-DROP SEQUENCE IF EXISTS ubicacion_historico_seq;
-CREATE SEQUENCE ubicacion_historico_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla ubicacion_historico
 DROP TABLE IF EXISTS ubicacion_historico;
@@ -238,8 +194,6 @@ CREATE TABLE ubicacion_historico (
     latitud NUMBER(9,6) not null,
     viaje_id NUMBER(10,0) not null constraint ubicacion_historico_viaje_id_fk references viaje(viaje_id)
 );
-
-prompt Crear secuencia historico_status_viaje_seq para historico_status_viaje_id
 
 prompt Crear tabla historico_status_viaje
 DROP TABLE IF EXISTS historico_status_viaje;
@@ -260,10 +214,6 @@ CREATE TABLE cobro (
     monto_porcentaje AS (monto_total * porcentaje),
     constraint cobro_pk primary key(viaje_id, tarjeta_id)
 );
-
-prompt Crear secuencia queja_seq para queja_id
-DROP SEQUENCE IF EXISTS queja_seq;
-CREATE SEQUENCE queja_seq START WITH 1 INCREMENT BY 1;
 
 prompt Crear tabla queja
 DROP TABLE IF EXISTS queja;
