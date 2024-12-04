@@ -20,7 +20,7 @@ CREATE TABLE usuario (
     nombre VARCHAR2(40) not null,
     apellido_paterno VARCHAR2(40) not null,
     apellido_materno VARCHAR2(40),
-    email VARCHAR2(40) not null unique,
+    email VARCHAR2(40) not null,
     contrasenia VARCHAR2(20) not null,
     es_cliente NUMBER(1,0) not null,
     es_administrador NUMBER(1,0) not null,
