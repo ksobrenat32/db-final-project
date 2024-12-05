@@ -181,7 +181,8 @@ CREATE TABLE factura (
     importe NUMBER(7,2) not null,
     archivo BLOB not null,
     rfc VARCHAR2(13) not null,
-    direccion VARCHAR2(200) not null
+    direccion VARCHAR2(200) not null,
+    viaje_id NUMBER(10,0) not null constraint factura_viaje_id_fk references viaje(viaje_id)
 );
 
 
