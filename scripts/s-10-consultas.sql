@@ -19,11 +19,12 @@ pueden incluirse varios de los elementos anteriores.
 
 
 -- Se mostrara el nomber, usuario_id, numero de cedula y el numero de etiquetas que 
--- posee un conductor 
+-- posee un conductor con mas de una sola etiqueta
 
 select usuario_id, nombre, apellido_paterno, apellido_materno, numero_cedula,
-  sum(contador)
+  sum(contador) as total_tags
 from usuario
 natural join usuario_conductor
 natural join tags_condutor
-group by usuario_id, nombre, apellido_paterno, apellido_paterno, numero_cedula;
+group by usuario_id, nombre, apellido_paterno, apellido_paterno, numero_cedula
+having total_tags > 1 ;
