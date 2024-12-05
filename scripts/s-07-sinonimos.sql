@@ -9,19 +9,26 @@ CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
 --  Los tags de los conductores deben ser visibles para otros usuarios pues con esto los conductores pueden ser identificados y se pueden saber los mejores, para esto debemos crear un sinónimo público de la tabla tags_conductor.
 
+prompt Creando sinónimos públicos
+
+prompt Crear sinónimo público de la tabla tags_conductor
 create or replace public synonym tags_conductor for cn_proy_admin.tags_conductor;
 
 -- Los vehículos deben ser visibles para otros usuarios, pues con esto se pueden saber los vehículos que están disponibles para el servicio, para esto debemos crear un sinónimo público de la tabla vehiculo.
 
+prompt Crear sinónimo público de la tabla vehiculo
 create or replace public synonym vehiculo for cn_proy_admin.vehiculo;
 
 -- Los descuentos deben ser visibles para otros usuarios, pues con esto se pueden saber los descuentos que se pueden aplicar a los servicios, para esto debemos crear un sinónimo público de la tabla descuento.
 
+prompt Crear sinónimo público de la tabla descuento
 create or replace public synonym descuento for cn_proy_admin.descuento;
 
 -- Generar las instrucciones necesarias para que el usuario admin otorgue permisos de lectura al usuario invitado en al menos 3 entidades.
 
 -- Para el sistema de pagos nuestra empresa se alía con una empresa de pagos en línea, por lo que necesitamos que el usuario invitado pueda ver los cobros, las tarjetas y facturas.
+
+prompt Otorgando permisos de lectura al usuario invitado
 
 grant select on cobro to cn_proy_invitado;
 grant select on tarjeta to cn_proy_invitado;
@@ -31,6 +38,8 @@ grant select on factura to cn_proy_invitado;
 
 -- Conexión a la base de datos como invitado
 CONNECT cn_proy_invitado/cn_proy_invitado@//localhost:1521/FREEPDB1
+
+prompt Crear sinónimos para las tablas desde el usuario invitado
 
 create or replace synonym cobro for cn_proy_admin.cobro;
 create or replace synonym tarjeta for cn_proy_admin.tarjeta;
@@ -42,8 +51,9 @@ create or replace synonym factura for cn_proy_admin.factura;
 CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
 -- Creación de sinónimos para las tablas
+prompt Creando sinónimos privados para las tablas
+
 set serveroutput on
-clear screen
 
 declare
 
@@ -54,8 +64,8 @@ declare
 
 begin
   for tabla in cur_tablas loop
-    execute immediate 'create or replace synonym cn_'|| tabla.table_name || ' on cn_proy_admin.' || tabla.table_name;
-    dbms_output.put_line('Sinónimo creado para la tabla ' || tabla.table_name);
+    execute immediate 'create or replace synonym cn_'|| tabla.table_name || ' for cn_proy_admin.' || tabla.table_name;
+    dbms_output.put_line('Sinonimo creado para la tabla ' || tabla.table_name);
   end loop;
-end
+end;
 /
