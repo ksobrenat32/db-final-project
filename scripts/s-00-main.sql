@@ -16,3 +16,6 @@
 
 -- Crear sinónimos
 @s-07-sinonimos.sql
+
+-- Crear vistas
+@s-08-vistas.sql
