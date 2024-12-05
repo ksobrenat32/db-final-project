@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
         "anio",
+        "badfile",
         "calificacion",
+        "campania",
         "categoria",
         "cedula",
         "codigo",
@@ -10,6 +12,8 @@
         "direccion",
         "FREEPDB",
         "historico",
+        "logfile",
+        "lrtrim",
         "nextval",
         "proy",
         "ubicacion",
