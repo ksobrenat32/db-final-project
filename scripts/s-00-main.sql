@@ -19,3 +19,6 @@
 
 -- Crear vistas
 @s-08-vistas.sql
+
+-- Carga inicial
+@s-09-carga-inicial.sql
