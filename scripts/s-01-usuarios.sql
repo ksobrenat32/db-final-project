@@ -29,6 +29,7 @@ prompt Creando cn_proy_admin
 DROP USER IF EXISTS cn_proy_admin CASCADE;
 CREATE USER cn_proy_admin IDENTIFIED BY cn_proy_admin QUOTA UNLIMITED ON USERS;
 GRANT rol_admin TO cn_proy_admin;
+GRANT CREATE SESSION TO cn_proy_admin;
 
 prompt Creando cn_proy_invitado
 DROP USER IF EXISTS cn_proy_invitado CASCADE;
