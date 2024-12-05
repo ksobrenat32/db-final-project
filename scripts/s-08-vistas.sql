@@ -57,3 +57,14 @@ JOIN usuario u ON uc.usuario_id = u.usuario_id
 JOIN vehiculo ve ON v.vehiculo_id = ve.vehiculo_id
 WHERE sv.clave = 'COMPLETADO';
 
+-- Vista 4: Vista que muestra la cantidad de personas que tienen cada descuento
+
+prompt Crear vista de cantidad de descuento total por usuario
+DROP VIEW IF EXISTS v_usuario_descuento_total;
+CREATE VIEW v_usuario_descuento_total AS
+SELECT
+    u.usuario_id, u.username, u.nombre, u.apellido_paterno, u.apellido_materno, u.email,
+    SUM(d.importe) AS total_descuento
+FROM usuario u
+JOIN descuento d ON u.usuario_id = d.usuario_id
+GROUP BY u.usuario_id, u.username, u.nombre, u.apellido_paterno, u.apellido_materno, u.email;
