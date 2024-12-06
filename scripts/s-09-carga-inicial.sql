@@ -774,13 +774,108 @@ BEGIN
 END;
 /
 
+DECLARE
+    v_modelo_id modelo.modelo_id%TYPE;
+    v_usuario_id usuario.usuario_id%TYPE;
+BEGIN
+    SELECT modelo_id
+    INTO v_modelo_id
+    FROM modelo
+    WHERE nombre = 'Golf';
+
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'driver3';
+
+    INSERT INTO vehiculo (placas, anio, modelo_id, usuario_id)
+    VALUES ('DEF456', 2022, v_modelo_id, v_usuario_id);
+END;
+/
+
+DECLARE
+    v_modelo_id modelo.modelo_id%TYPE;
+    v_usuario_id usuario.usuario_id%TYPE;
+BEGIN
+    SELECT modelo_id
+    INTO v_modelo_id
+    FROM modelo
+    WHERE nombre = 'Tiguan';
+
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'driver4';
+
+    INSERT INTO vehiculo (placas, anio, modelo_id, usuario_id)
+    VALUES ('GHI789', 2021, v_modelo_id, v_usuario_id);
+END;
+/
+
+DECLARE
+    v_modelo_id modelo.modelo_id%TYPE;
+    v_usuario_id usuario.usuario_id%TYPE;
+BEGIN
+    SELECT modelo_id
+    INTO v_modelo_id
+    FROM modelo
+    WHERE nombre = 'Versa';
+
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'driver5';
+
+    INSERT INTO vehiculo (placas, anio, modelo_id, usuario_id)
+    VALUES ('JKL012', 2020, v_modelo_id, v_usuario_id);
+END;
+/
+
+DECLARE
+    v_modelo_id modelo.modelo_id%TYPE;
+    v_usuario_id usuario.usuario_id%TYPE;
+BEGIN
+    SELECT modelo_id
+    INTO v_modelo_id
+    FROM modelo
+    WHERE nombre = 'Corolla';
+
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'user_driver1';
+
+    INSERT INTO vehiculo (placas, anio, modelo_id, usuario_id)
+    VALUES ('MNO345', 2019, v_modelo_id, v_usuario_id);
+END;
+/
+
+DECLARE
+    v_modelo_id modelo.modelo_id%TYPE;
+    v_usuario_id usuario.usuario_id%TYPE;
+BEGIN
+    SELECT modelo_id
+    INTO v_modelo_id
+    FROM modelo
+    WHERE nombre = 'RAV4';
+
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'user_driver2';
+
+    INSERT INTO vehiculo (placas, anio, modelo_id, usuario_id)
+    VALUES ('PQR678', 2018, v_modelo_id, v_usuario_id);
+END;
+/
+
 -- Crear pagos
 
 prompt Crear pagos de prueba
 
 DECLARE
     v_usuario_id usuario.usuario_id%TYPE;
-    v_contador pag.folio%TYPE;
+    v_contador pago.folio%TYPE;
 BEGIN
     SELECT usuario_id
     INTO v_usuario_id
@@ -800,7 +895,7 @@ END;
 
 DECLARE
     v_usuario_id usuario.usuario_id%TYPE;
-    v_contador pag.folio%TYPE;
+    v_contador pago.folio%TYPE;
 BEGIN
     SELECT usuario_id
     INTO v_usuario_id
@@ -882,6 +977,101 @@ BEGIN
 END;
 /
 
+DECLARE
+    v_usuario_id usuario.usuario_id%TYPE;
+    v_tag_id tags.tag_id%TYPE;
+BEGIN
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'driver3';
+
+    SELECT tag_id
+    INTO v_tag_id
+    FROM tags
+    WHERE clave = 'PLATICA';
+
+    INSERT INTO tags_conductor (usuario_id, tag_id, contador)
+    VALUES (v_usuario_id, v_tag_id, 4);
+END;
+/
+
+DECLARE
+    v_usuario_id usuario.usuario_id%TYPE;
+    v_tag_id tags.tag_id%TYPE;
+BEGIN
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'driver4';
+
+    SELECT tag_id
+    INTO v_tag_id
+    FROM tags
+    WHERE clave = 'MUSICA';
+
+    INSERT INTO tags_conductor (usuario_id, tag_id, contador)
+    VALUES (v_usuario_id, v_tag_id, 5);
+END;
+/
+
+DECLARE
+    v_usuario_id usuario.usuario_id%TYPE;
+    v_tag_id tags.tag_id%TYPE;
+BEGIN
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'driver5';
+
+    SELECT tag_id
+    INTO v_tag_id
+    FROM tags
+    WHERE clave = 'LIMPIEZA';
+
+    INSERT INTO tags_conductor (usuario_id, tag_id, contador)
+    VALUES (v_usuario_id, v_tag_id, 3);
+END;
+/
+
+DECLARE
+    v_usuario_id usuario.usuario_id%TYPE;
+    v_tag_id tags.tag_id%TYPE;
+BEGIN
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'user_driver1';
+
+    SELECT tag_id
+    INTO v_tag_id
+    FROM tags
+    WHERE clave = 'SEGURIDAD';
+
+    INSERT INTO tags_conductor (usuario_id, tag_id, contador)
+    VALUES (v_usuario_id, v_tag_id, 4);
+END;
+/
+
+DECLARE
+    v_usuario_id usuario.usuario_id%TYPE;
+    v_tag_id tags.tag_id%TYPE;
+BEGIN
+    SELECT usuario_id
+    INTO v_usuario_id
+    FROM usuario
+    WHERE username = 'user_driver2';
+
+    SELECT tag_id
+    INTO v_tag_id
+    FROM tags
+    WHERE clave = 'PUNTUALIDAD';
+
+    INSERT INTO tags_conductor (usuario_id, tag_id, contador)
+    VALUES (v_usuario_id, v_tag_id, 5);
+END;
+/
+
 -- Crear tarjetas
 
 prompt Crear tarjetas de prueba
@@ -895,7 +1085,7 @@ BEGIN
     WHERE username = 'user1';
 
     INSERT INTO tarjeta (usuario_id, numero_tarjeta, mes, anio)
-    VALUES (v_usuario_ID, '1234567890123456', 12, 24);
+    VALUES (v_usuario_ID, '1234567890123456', 12, 20);
 END;
 /
 
@@ -908,7 +1098,7 @@ BEGIN
     WHERE username = 'user2';
 
     INSERT INTO tarjeta (usuario_id, numero_tarjeta, mes, anio)
-    VALUES (v_usuario_ID, '2345678901234567', 11, 25);
+    VALUES (v_usuario_ID, '2345678901234567', 11, 21);
 END;
 /
 
