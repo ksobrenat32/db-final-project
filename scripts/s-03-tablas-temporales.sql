@@ -18,7 +18,9 @@ DROP TABLE IF EXISTS vehiculo_candidato;
 create global temporary table vehiculo_candidato(
   vehiculo_id NUMBER(10,0),
   num_asientos NUMBER(1,0),
-  categoria NUMBER(1,0)
+  categoria NUMBER(1,0),
+  longitud NUMBER(10,0),
+  latitud NUMBER(10,0)
 ) on commit preserve rows;
 
 /*
