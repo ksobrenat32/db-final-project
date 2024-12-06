@@ -2,6 +2,8 @@
 --@Fecha creación: 1 de diciembre de 2024
 --@Descripción: Este llama a los scripts necesarios para crear todo.
 
+spool s-00-main.log append
+
 -- Crear usuarios
 @s-01-usuarios.sql
 
@@ -20,5 +22,13 @@
 -- Crear vistas
 @s-08-vistas.sql
 
+-- Crear tablas temporales
+@s-03-tablas-temporales.sql
+
+-- Crear tablas externas
+@s-04-tablas-externas.sql
+
 -- Carga inicial
 @s-09-carga-inicial.sql
+
+spool off
