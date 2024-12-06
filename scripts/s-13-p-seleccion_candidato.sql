@@ -1,6 +1,7 @@
  --@Autor(es): Enrique Job Calderón Olalde <@ksobrenat32>, Erick Nava Santiago
 --@Fecha creación: 1 de diciembre de 2024
 --@Descripción: Procedimiento que dará obtener la asignacion de un automovil
+ -- Aun lado a eso se utilzara un cursor, cumpliendo con el script s19
 
 
 CREATE OR DELETE PROCEDURE sp_seleccion_auto(
