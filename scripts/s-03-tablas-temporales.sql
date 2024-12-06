@@ -20,7 +20,8 @@ create global temporary table vehiculo_candidato(
   num_asientos NUMBER(1,0),
   categoria NUMBER(1,0),
   longitud NUMBER(10,0),
-  latitud NUMBER(10,0)
+  latitud NUMBER(10,0),
+  activo BOOLEAN
 ) on commit preserve rows;
 
 /*
