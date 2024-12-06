@@ -4,6 +4,10 @@
 
 --Diseñar un escenario donde se haga uso de una o más tablas externas.
 
+CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
+
+CREATE OR REPLACE DIRECTORY tablas_externas AS '/home/oracle/scripts/tablas_externas';
+
 /*
   EJEMPLO 1
   Tabla de usuarios que tienen una solicitud para ser conductores de
@@ -11,6 +15,7 @@
   los datos de los usuarios que desean ser conductores.
 */
 
+DROP TABLE IF EXISTS usuario_conductor_ext;
 create table usuario_conductor_ext(
   nombre VARCHAR2(40),
   apellido_paterno VARCHAR2(40),
@@ -40,7 +45,7 @@ organization external(
     )
   )
   location ('usuario_conductor_ext.csv')
-) reject limited unlimited;
+) reject limit unlimited;
 
 /*
   EJEMPLO 2
@@ -50,6 +55,7 @@ organization external(
   multa, la fecha de la multa y la descripción de la multa.
 */
 
+DROP TABLE IF EXISTS multas_ext;
 create table multas_ext(
   placa VARCHAR2(7),
   monto NUMBER(7,2),
@@ -71,7 +77,7 @@ organization external(
     )
   )
   location ('multas_ext.csv')
-) reject limited unlimited;
+) reject limit unlimited;
 
 /*
   EJEMPLO 3
@@ -82,8 +88,9 @@ organization external(
   y el importe de la promoción.
 */
 
+DROP TABLE IF EXISTS campania_ext;
 create table campania_ext(
-  importe NUMBER(5,2)
+  importe NUMBER(5,2),
   fecha_inicio DATE,
   fecha_fin DATE,
   nombre_campania VARCHAR2(100),
@@ -104,4 +111,4 @@ organization external(
     )
   )
   location ('campania_ext.csv')
-)reject limited unlimited;
+)reject limit unlimited;
