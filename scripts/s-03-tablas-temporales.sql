@@ -4,6 +4,8 @@
 
 --Diseñar al menos un escenario donde se haga uso de una o más tablas temporales. Se pueden crear nuevas tablas en caso de ser necesario.
 
+CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
+
 /*
   EJEMPLO 1
   La plataforma donde se solicita el viaje, asigna el auto más cercano.
@@ -12,6 +14,7 @@
   elija el que más le convenga.
 */
 
+DROP TABLE IF EXISTS vehiculo_candidato;
 create global temporary table vehiculo_candidato(
   vehiculo_id NUMBER(10,0),
   num_asientos NUMBER(1,0),
@@ -31,5 +34,5 @@ create private temporary table ora$ptt_tarj_pred(
   banco VARCHAR2(100),
   numero_tarjeta VARCHAR2(16),
   mes NUMBER(2,0),
-  anio NUMBER(4,0),
-); on commit drop definition;
+  anio NUMBER(4,0)
+) on commit drop definition;
