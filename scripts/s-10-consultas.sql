@@ -10,12 +10,14 @@ de los siguientes elementos.
 - álgebra relacional (operadores set: union, intersect, minus).
 - Subconsultas
 - Consulta que involucre el uso de un sinónimo
-○ Consulta que involucre el uso de una vista
-○ Consulta que involucre una tabla temporal
-○ Consulta que involucre a una tabla externa.
+- Consulta que involucre el uso de una vista
+- Consulta que involucre una tabla temporal
+- Consulta que involucre a una tabla externa.
 ● No es necesario crear una consulta por cada elemento. En una misma consulta
 pueden incluirse varios de los elementos anteriores.
 */
+
+CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
 -- Consulta con funciones de agregación y joins.
 
@@ -82,7 +84,49 @@ WHERE
   )
 ;
 
--- Consulta con vistas.
+-- Consulta con vistas y tablas externas.
 
+prompt Consulta 4: Buscamos toda la información de los autos con multas
 
+SELECT
+  va.placas, va.anio, va.descripcion_marca, va.categoria_marca, va.modelo_nombre, va.modelo_descripcion,
+  m.monto, m.fecha_multa, m.descripcion
+FROM
+  v_auto_marca_modelo va
+  JOIN multas_ext m ON va.placas = m.placa
+;
+
+-- Consulta con tablas temporales.
+
+prompt Crear vehículos candidatos de prueba
+
+-- Crear vehiculo_candidato
+
+prompt Crear vehículos candidatos
+
+INSERT INTO vehiculo_candidato
+    (vehiculo_id, longitud, latitud, activo)
+VALUES
+    (1, -99.1332, 19.4326,  1);
+
+INSERT INTO vehiculo_candidato
+    (vehiculo_id, longitud, latitud, activo)
+VALUES
+    (2, -99.1332, 19.4126, 0);
+
+INSERT INTO vehiculo_candidato
+    (vehiculo_id, longitud, latitud, activo)
+VALUES
+    (3, -99.1332, 19.4226, 1);
+
+prompt Consulta 5: Buscamos los vehículos candidatos activos
+
+SELECT
+  v.placas, v.anio, va.longitud, va.latitud
+FROM
+  vehiculo_candidato va
+  JOIN vehiculo v ON va.vehiculo_id = v.vehiculo_id
+WHERE
+  va.activo = 1
+;
 

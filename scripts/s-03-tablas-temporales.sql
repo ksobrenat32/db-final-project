@@ -6,6 +6,8 @@
 
 CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
+prompt Creando tablas temporales
+
 /*
   EJEMPLO 1
   La plataforma donde se solicita el viaje, asigna el auto más cercano.
@@ -16,12 +18,10 @@ CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
 DROP TABLE IF EXISTS vehiculo_candidato;
 create global temporary table vehiculo_candidato(
-  vehiculo_id NUMBER(10,0),
-  num_asientos NUMBER(1,0),
-  categoria NUMBER(1,0),
-  longitud NUMBER(10,0),
-  latitud NUMBER(10,0),
-  activo BOOLEAN
+  vehiculo_id NUMBER(10,0) constraint vehiculo_candidato_pk primary key,
+  longitud NUMBER(9,6),
+  latitud NUMBER(9,6),
+  activo NUMBER(1,0)
 ) on commit preserve rows;
 
 /*
