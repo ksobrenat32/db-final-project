@@ -56,6 +56,39 @@ def add_vehiculo(username, modelo, placas, anio):
     cursor.execute(f"INSERT INTO vehiculo (usuario_id, modelo_id, placas, anio) VALUES ((SELECT usuario_id FROM usuario WHERE username = '{username}'), (SELECT modelo_id FROM modelo WHERE nombre = '{modelo}'), '{placas}', '{anio}')")
     conn.commit()
 
+    cursor.execute(f"SELECT vehiculo_id FROM vehiculo WHERE placas = '{placas}'")
+    return cursor.fetchone()[0]
+
+def add_usuario(username, nombre, apellido_paterno, apellido_materno, correo, password, es_cliente, es_administrador, es_conductor, usuario_recomendado):
+    conn = connect()
+    cursor = conn.cursor()
+    if usuario_recomendado == '':
+        cursor.execute(f"INSERT INTO usuario (username, nombre, apellido_paterno, apellido_materno, email, contrasenia, es_cliente, es_administrador, es_conductor, usuario_recomendado_id) VALUES ('{username}', '{nombre}', '{apellido_paterno}', '{apellido_materno}', '{correo}', '{password}', {es_cliente}, {es_administrador}, {es_conductor}, NULL)")
+    else:
+        cursor.execute(f"INSERT INTO usuario (username, nombre, apellido_paterno, apellido_materno, email, contrasenia, es_cliente, es_administrador, es_conductor, usuario_recomendado_id) VALUES ('{username}', '{nombre}', '{apellido_paterno}', '{apellido_materno}', '{correo}', '{password}', {es_cliente}, {es_administrador}, {es_conductor}, (SELECT usuario_id FROM usuario WHERE username = '{usuario_recomendado}'))")
+    conn.commit()
+
+    cursor.execute(f"SELECT usuario_id FROM usuario WHERE username = '{username}'")
+    return cursor.fetchone()[0]
+
+def add_conductor(usuario_id, num_licencia, num_cedula, foto, descripcion):
+    conn = connect()
+    cursor = conn.cursor()
+    cursor.execute(f"INSERT INTO usuario_conductor (usuario_id, num_licencia, num_cedula, foto, descripcion) VALUES ({usuario_id}, '{num_licencia}', '{num_cedula}', :blobdata, '{descripcion}')", blobdata=foto)
+    conn.commit()
+
+def add_administrador(usuario_id, codigo, certificado, num_cedula):
+    conn = connect()
+    cursor = conn.cursor()
+    cursor.execute(f"INSERT INTO usuario_administrador (usuario_id, codigo, certificado, num_cedula) VALUES ({usuario_id}, '{codigo}', :blobdata, '{num_cedula}')", blobdata=certificado)
+    conn.commit()
+
+def add_cliente(usuario_id, num_celular):
+    conn = connect()
+    cursor = conn.cursor()
+    cursor.execute(f"INSERT INTO usuario_cliente (usuario_id, num_celular) VALUES ({usuario_id}, '{num_celular}')")
+    conn.commit()
+
 def get_vehiculo_id(placas):
     conn = connect()
     cursor = conn.cursor()
