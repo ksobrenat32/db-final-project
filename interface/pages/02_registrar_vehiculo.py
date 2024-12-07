@@ -16,6 +16,8 @@ if 'modelo_list' not in st.session_state:
 
 if 'page' not in st.session_state:
     st.session_state['page'] = 'form_categoria'
+if st.session_state['page'] not in ['form_categoria', 'form_marca', 'form_vehiculo']:
+    st.session_state['page'] = 'form_categoria'
 
 
 st.title("Registrar vehículo")
