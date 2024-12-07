@@ -1539,3 +1539,5 @@ BEGIN
     VALUES ('Conductor tardado', SYSDATE, 'El conductor llegó tarde al punto de encuentro', 'Se sancionó al conductor', v_viaje_id, v_administrador_id);
 END;
 /
+
+commit;
