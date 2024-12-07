@@ -16,6 +16,7 @@
         "lrtrim",
         "nextval",
         "proy",
+        "selectbox",
         "ubicacion",
         "vehiculo"
     ]
