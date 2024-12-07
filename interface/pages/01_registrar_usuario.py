@@ -56,7 +56,7 @@ def usuario_page():
             select_conductor = '0'
             st.session_state['es_conductor'] = False
 
-        uc = get_all_usuario_conductor()
+        uc = get_all_usuario()
         uc.insert(0, '')
         select_usuario_recomendado = st.selectbox("Usuario recomendado", uc)
 

@@ -17,6 +17,15 @@ def connect() -> oracledb.Cursor:
         print(f"Connection failed: {e}")
         return None
 
+def get_all_usuario():
+    conn = connect()
+    cursor = conn.cursor()
+    cursor.execute("SELECT username FROM usuario")
+    r = []
+    for i in cursor.fetchall():
+        r.append(i[0])
+    return r
+
 def get_all_usuario_conductor():
     conn = connect()
     cursor = conn.cursor()
