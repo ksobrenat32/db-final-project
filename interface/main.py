@@ -3,10 +3,18 @@
 #@Descripción: Archivo principal de la interfaz gráfica
 
 import streamlit as st
-import pandas as pd
 
-st.write("Here's our first attempt at using data to create a table:")
-st.write(pd.DataFrame({
-    'first column': [1, 2, 3, 4],
-    'second column': [10, 20, 30, 40]
-}))
+st.set_page_config(
+    page_title="Virtual Traveler",
+    page_icon="🌍",
+    layout="centered",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Report a bug': 'https://github.com/ksobrenat32/db-final-project/issues',
+        'About': 'This is a web application for the final project of the Databases course.'
+    }
+)
+
+
+st.markdown("# Virtual Traveler")
+st.markdown("Welcome to Virtual Traveler! This is a web application that moves you to the place you want to visit.")
