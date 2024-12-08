@@ -1,79 +1,74 @@
- --@Autor(es): Enrique Job Calderón Olalde <@ksobrenat32>, Erick Nava Santiago
+--@Autor(es): Enrique Job Calderón Olalde <@ksobrenat32>, Erick Nava Santiago
 --@Fecha creación: 1 de diciembre de 2024
---@Descripción: Aquí se hará uso de un dato lob. La intención es recibir las imagenes
---- de los empleados conductores
+--@Descripción: Aquí se hará uso de un dato lob dentro del procedimiento para que con las imágenes ubicadas en /home/oracle/scripts/imagen/ se pueda actualizar la imagen de un usuario_conductor. El formato de la imagen almacenada es usuario_id.jpg y en la tabla usuario_conductor se almacenará la imagen en el atributo foto de tipo BLOB.
 
---concetando con el usuario sys
-CONNECT sys/system1@//localhost:1521/FREEPDB1 AS SYSDBA
+-- Conectando con el usuario administrador
+CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
---creando directorio a utilizar
+-- Creando directorio a utilizar
 CREATE OR REPLACE directory fotos_dir as '/home/oracle/scripts/imagen/';
---otorgando permisos a el usuario admin
-GRANT READ ON directory fotos_dir to cn_proy_admin
 
---inicio del procedimiento para el llenado de la imagen 
-CREATE OR REPLACE PROCEDURE empleado_imagen(
-    p_usuario_id IN NUMBER,
-    p_licencia IN VARCHAR2, 
-    p_cedula IN VARCHAR2,
-    p_descripcion IN VARCHAR2) is
-
-    v_bfile bfile;
-    v_src_offset number := 1;
-    v_dest_offset number:= 1;
-    v_dest_blob blob;
-    v_src_length number;
-    v_dest_length number;
-
-    type ch_varray is varray(2) of VARCHAR2;
-    extensiones ch_varray ;
-    v_encontrado BOOLEAN := FALSE;
-
-BEGIN 
-  FOR i IN 1..extensiones.limit LOOP
-    v_bfile := BFILENAME('FOTOS_DIR', p_usuario_id || '.jpg');
-  
-    IF dbms_lob.fileexists(v_bfile) = 1 AND NOT
-      dbms_lob.isopen(v_bfile) = 1 THEN
-      dbms_lob.open(v_bfile,dbms_lob.lob_readonly);
-      v_encontrado := TRUE;
-      EXIT;
-    END IF;
-
-  END LOOP;
-
-  IF NOT v_encontrado THEN
-      raise_application_error(-20212,'NO SE ENCONTRO NINGUNA FOTO ');
-  END IF;
-
-  INSERT INTO usuario_conductor(usuario_id,num_licencia,
-    num_cedula, foto, descripcion)
-    VALUES(p_usuario_id,p_licencia,p_cedula,empty_blob(),p_descripcion);
-
-  SELECT foto INTO v_dest_blob
+-- Inicio del procedimiento para el llenado de la imagen
+-- Procedimiento corregido para actualizar imágenes de usuarios
+CREATE OR REPLACE PROCEDURE actualizar_empleado_imagen(
+    p_usuario_id IN NUMBER
+)
+IS
+  v_bfile BFILE;
+  v_blob BLOB;
+  v_cnt NUMBER;
+  v_src_length NUMBER;
+BEGIN
+  -- Verificar que el usuario exista
+  SELECT COUNT(*)
+  INTO v_cnt
   FROM usuario_conductor
   WHERE usuario_id = p_usuario_id;
 
-  dbms_lob.loadblobfromfile(
-    dest_lob => v_dest_blob,
-    src_bfile => v_bfile,
-    amount => dbms_lob.getlength(v_bfile),
-    dest_offset => v_dest_offset,
-    src_offset => v_src_offset);
-  dbms_lob.close(v_bfile);
+  IF v_cnt = 0 THEN
+    RAISE_APPLICATION_ERROR(-20100, 'El usuario no existe');
+  END IF;
 
+  -- Inicializar el archivo BFILE
+  v_bfile := BFILENAME('FOTOS_DIR', p_usuario_id || '.jpg');
 
-  v_src_length := dbms_lob.getlength(v_bfile);
-  v_dest_length := dbms_lob.getlength(v_dest_blob);
+  -- Verificar que el archivo exista
+  IF NOT DBMS_LOB.FILEEXISTS(v_bfile) = 1 THEN
+    RAISE_APPLICATION_ERROR(-20101, 'El archivo no existe en el directorio');
+  END IF;
 
-  if v_src_length = v_dest_length then
-    dbms_output.put_line('Escritura correcta, bytes escritos: '
-    || v_src_length);
-  else
-    raise_application_error(-20211,'Error al escribir datos.\n'
-      ||' Se esperaba escribir '||v_src_length
-      ||' Pero solo se escribio '||v_dest_length);
-  end if;
-END ;
+  -- Abrir el archivo
+  DBMS_LOB.OPEN(v_bfile, DBMS_LOB.LOB_READONLY);
+
+  -- Crear un BLOB temporal
+  DBMS_LOB.CREATETEMPORARY(v_blob, TRUE);
+
+  -- Leer el archivo BFILE y escribirlo en el BLOB
+  v_src_length := DBMS_LOB.GETLENGTH(v_bfile);
+  DBMS_LOB.LOADFROMFILE(v_blob, v_bfile, v_src_length);
+
+  -- Actualizar la imagen en la tabla
+  UPDATE usuario_conductor
+  SET foto = v_blob
+  WHERE usuario_id = p_usuario_id;
+
+  -- Cerrar el archivo BFILE
+  DBMS_LOB.CLOSE(v_bfile);
+
+  -- Liberar el BLOB temporal
+  DBMS_LOB.FREETEMPORARY(v_blob);
+
+  DBMS_OUTPUT.PUT_LINE('Imagen actualizada exitosamente para el usuario ' || p_usuario_id);
+EXCEPTION
+  WHEN OTHERS THEN
+    -- Asegurarse de cerrar el archivo y liberar recursos en caso de error
+    IF DBMS_LOB.ISOPEN(v_bfile) = 1 THEN
+      DBMS_LOB.CLOSE(v_bfile);
+    END IF;
+    IF v_blob IS NOT NULL AND DBMS_LOB.ISTEMPORARY(v_blob) = 1 THEN
+      DBMS_LOB.FREETEMPORARY(v_blob);
+    END IF;
+    RAISE_APPLICATION_ERROR(-20002, 'Error al actualizar la imagen: ' || SQLERRM);
+END;
 /
-SHOW ERRORS
+SHOW ERRORS;
