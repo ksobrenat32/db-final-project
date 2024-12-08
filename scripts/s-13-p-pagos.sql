@@ -5,7 +5,7 @@
 CONNECT cn_proy_admin/cn_proy_admin@//localhost:1521/FREEPDB1
 
 CREATE OR REPLACE PROCEDURE sp_creacion_pagos(
-  v_num_licencia IN NUMBER,
+  v_num_licencia IN VARCHAR2,
   v_num_pagos IN NUMBER,
   v_monto_total IN NUMBER,
   v_dif_dias IN NUMBER
