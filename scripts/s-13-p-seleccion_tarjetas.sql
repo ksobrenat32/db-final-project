@@ -1,10 +1,13 @@
+--@Autor(es): Enrique Job Calderón Olalde <@ksobrenat32>, Erick Nava Santiago
+--@Fecha creación: 8 de diciembre de 2024
+--@Descripción: PROCEDIMIENTO PARA ASIGNAR EL PROCENTAJE QUE TENDRA CADA TARJETA
 CREATE OR REPLACE PROCEDURE sp_seleccion_tarjetas(
   v_tarjeta_1 IN NUMBER,
-  v_porcentaje_1 IN OUT NUMBER DEFAULT NULL,  -- Cambiar a IN OUT
-  v_tarjeta_2 IN NUMBER DEFAULT NULL,
-  v_porcentaje_2 IN OUT NUMBER DEFAULT NULL,  -- Cambiar a IN OUT
-  v_tarjeta_3 IN NUMBER DEFAULT NULL,
-  v_porcentaje_3 IN OUT NUMBER DEFAULT NULL,  -- Cambiar a IN OUT
+  v_porcentaje_1 IN OUT NUMBER, 
+  v_tarjeta_2 IN NUMBER ,
+  v_porcentaje_2 IN OUT NUMBER,  
+  v_tarjeta_3 IN NUMBER ,
+  v_porcentaje_3 IN OUT NUMBER ,  
   v_valido OUT varchar2
 ) IS
   v_porcentaje_total NUMBER := 0;
@@ -61,6 +64,10 @@ BEGIN
 
   -- Validación final: porcentaje total debe ser exactamente 100%
   v_porcentaje_total := NVL(v_porcentaje_1, 0) + NVL(v_porcentaje_2, 0) + NVL(v_porcentaje_3, 0);
+  IF v_porcentaje_total >= 99.99 THEN
+    v_porcentaje_total := 100;
+  END IF;
+
   IF v_porcentaje_total <> 100 THEN
     v_valido := 'Error: El porcentaje total no suma 100%.';
     RETURN;
