@@ -37,18 +37,24 @@ BEGIN
       DBMS_OUTPUT.PUT_LINE('Error al insertar datos en la tabla temporal: ' || SQLERRM);
   END;
 
-  -- PRUEBA: USO CORRECTO DEL PROCEDIMIENTO
+  -- PRUEBA: USO CORRECTO DE LA FUNCIÓN
   BEGIN
     v_longitud := 777;
     v_latitud := 3231;
     v_asientos := 4;
 
-    sp_seleccion_auto(v_vehiculo_id, v_longitud, v_latitud, v_asientos);
-    DBMS_OUTPUT.PUT_LINE('Prueba correcta: Vehículo seleccionado con ID: ' || v_vehiculo_id);
+    DBMS_OUTPUT.PUT_LINE('Prueba correcta: Seleccionando vehículo con asientos: ' || v_asientos);
 
+    v_vehiculo_id := fx_seleccion_auto(v_longitud, v_latitud, v_asientos);
+
+    if v_vehiculo_id = 1 then
+      DBMS_OUTPUT.PUT_LINE('Resultado correcto: Vehículo seleccionado con ID: ' || v_vehiculo_id);
+    else
+      DBMS_OUTPUT.PUT_LINE('Resultado incorrecto: Vehículo seleccionado con ID: ' || v_vehiculo_id);
+    end if;
   EXCEPTION
     WHEN OTHERS THEN
-      DBMS_OUTPUT.PUT_LINE('Error en la prueba correcta del procedimiento: ' || SQLERRM);
+      DBMS_OUTPUT.PUT_LINE('Error en la prueba correcta de la función: ' || SQLERRM);
   END;
 
   -- PRUEBA: USO INCORRECTO CON NÚMERO DE ASIENTOS MUY GRANDE
@@ -57,14 +63,17 @@ BEGIN
     v_latitud := 3231;
     v_asientos := 9;
 
-    sp_seleccion_auto(v_vehiculo_id, v_longitud, v_latitud, v_asientos);
-    DBMS_OUTPUT.PUT_LINE('Prueba con asientos grandes:' || v_vehiculo_id);
+    DBMS_OUTPUT.PUT_LINE('Prueba con asientos grandes: ' || v_asientos);
 
+    v_vehiculo_id := fx_seleccion_auto(v_longitud, v_latitud, v_asientos);
+
+    DBMS_OUTPUT.PUT_LINE('Prueba incorrecta: Vehículo seleccionado con ID: ' || v_vehiculo_id);
   EXCEPTION
     WHEN OTHERS THEN
-      DBMS_OUTPUT.PUT_LINE('Error en la prueba con asientos grandes: ' || SQLERRM);
+      DBMS_OUTPUT.PUT_LINE('Excepción correcta');
   END;
 
+  ROLLBACK;
 END;
 /
 SHOW ERRORS;

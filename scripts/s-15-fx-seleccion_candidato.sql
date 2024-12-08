@@ -1,17 +1,15 @@
 --@Autor(es): Enrique Job Calderón Olalde <@ksobrenat32>, Erick Nava Santiago
 --@Fecha creación: 1 de diciembre de 2024
---@Descripción: Procedimiento que selecciona un automóvil basado en ubicación y asientos requeridos.
---               Maneja casos donde no hay vehículos disponibles con asientos suficientes.
+--@Descripción: Función que selecciona un vehículo candidato para un viaje
 
-CREATE OR REPLACE PROCEDURE sp_seleccion_auto(
-  v_vehiculo_id OUT NUMBER,
+CREATE OR REPLACE FUNCTION fx_seleccion_auto(
   v_origen_longitud IN NUMBER,
   v_origen_latitud IN NUMBER,
   v_asientos IN NUMBER
-) IS 
-
+) RETURN NUMBER IS
   v_distancia NUMBER;
   v_distancia_candidato NUMBER;
+  v_vehiculo_id NUMBER;
   v_vehiculo_encontrado BOOLEAN := FALSE;
 
   -- Declaración de un cursor para recorrer los vehículos disponibles
@@ -34,7 +32,7 @@ BEGIN
                 );
 
     -- Seleccionando un candidato temporal
-    IF v_distancia > v_distancia_candidato AND   v_asientos <= vehiculo_candidato.num_asientos  THEN 
+    IF v_distancia > v_distancia_candidato AND v_asientos <= vehiculo_candidato.num_asientos THEN 
       v_distancia := v_distancia_candidato;
       v_vehiculo_id := vehiculo_candidato.vehiculo_id;
       v_vehiculo_encontrado := TRUE;
@@ -43,9 +41,11 @@ BEGIN
   END LOOP;
 
   -- Sin asientos suficientes 
-IF NOT v_vehiculo_encontrado THEN
-    RAISE_APPLICATION_ERROR(-23331, 'No se encontraron vehículos con suficientes asientos.');
+  IF NOT v_vehiculo_encontrado THEN
+    RAISE_APPLICATION_ERROR(-20331, 'No se encontraron vehículos con suficientes asientos.');
   END IF;
+
+  RETURN v_vehiculo_id;
 
 EXCEPTION
   WHEN OTHERS THEN
