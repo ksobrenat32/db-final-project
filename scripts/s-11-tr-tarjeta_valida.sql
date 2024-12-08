@@ -27,7 +27,6 @@ BEGIN
 --ASIGNANDO LA FECHA ACTUAL 
 v_fecha_actual := sysdate;
 v_fecha_tarjeta := last_day(to_date(:new.mes||'/'||:new.anio, 'mm/yy'));
-v_diferencia := v_fecha_actual - v_fecha_tarjeta;
 
   CASE
   --CUANDO SE INSERTA UN NUEVO REGISTRO
@@ -37,13 +36,13 @@ v_diferencia := v_fecha_actual - v_fecha_tarjeta;
       END IF;
   --CUANDO SE ACTUALIZA UN REGISTRO YA EXISTENTE   
     WHEN UPDATING THEN 
-      IF :old.tarjeta_id != :new-tarjeta_id or :old.numero_tarjeta != :new.numero_tarjeta THEN
+      IF :old.tarjeta_id != :new.tarjeta_id or :old.numero_tarjeta != :new.numero_tarjeta THEN
             RAISE_APPLICATION_ERROR(-20021,'Los identificadores de la tarjeta no coinciden');
   --EN CASO DE NO SOLTAR ERROR, SE VERIFICARA QUE SE ACTUALIZE A UNA FECHA VIGENTE          
-      ELSE:
+      ELSE
         IF v_fecha_actual > v_fecha_tarjeta THEN 
            RAISE_APPLICATION_ERROR(-20020,'La tarjeta se encuentra actualmente vencida');
-           ELSE:
+           ELSE
            --PERMITIR LA ACTUALIZACION DE DATOS
            NULL;
         END IF;

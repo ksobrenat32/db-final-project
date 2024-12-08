@@ -1,15 +1,15 @@
- --@Autor(es): Enrique Job Calderón Olalde <@ksobrenat32>, Erick Nava Santiago
+--@Autor(es): Enrique Job Calderón Olalde <@ksobrenat32>, Erick Nava Santiago
 --@Fecha creación: 1 de diciembre de 2024
 --@Descripción: esta funcion creara usernames de forma defaul. Basandose en los
 -- datos del usuario
 
-CREATE OR REPLACE FUNCTION totalGastos(
+CREATE OR REPLACE FUNCTION nombre_generico(
     v_nombre VARCHAR2,
     v_ap_pat VARCHAR2,
     v_ap_mat VARCHAR2 DEFAULT NULL
     ) 
-  RETURN VARCHAR2 IS v_def_nombre NUMBER;
-  v_fecha_numero VARCHAR2(10);
+  RETURN VARCHAR2 IS v_def_nombre VARCHAR2(40);
+  v_fecha_numero varchar2(30);
 
 BEGIN 
   --2 letras del nombre
