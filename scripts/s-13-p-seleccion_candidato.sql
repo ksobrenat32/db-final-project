@@ -18,7 +18,7 @@ CURSOR cur_vehiculo IS
 SELECT vehiculo_id, num_asientos, longitud, latitud 
 FROM vehiculo_candidato
 WHERE activo = 1
-  AND num_asientos = v_asientos;
+  AND num_asientos <= v_asientos;
 for each row
 BEGIN
   --asignando un numero muy grande a la diatancia
