@@ -21,7 +21,8 @@ create global temporary table vehiculo_candidato(
   vehiculo_id NUMBER(10,0) constraint vehiculo_candidato_pk primary key,
   longitud NUMBER(9,6),
   latitud NUMBER(9,6),
-  activo NUMBER(1,0)
+  activo NUMBER(1,0),
+  num_asientos NUMBER(1,0)
 ) on commit preserve rows;
 
 /*
